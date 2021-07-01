@@ -10,7 +10,7 @@ import org.hibernate.cfg.Configuration;
 public class HibernateUtils {
 
     @Getter
-    private static final SessionFactory SESSION_FACTORY = buildSessionFactory();
+    private static final SessionFactory sessionFactory = buildSessionFactory();
 
     private static SessionFactory buildSessionFactory() {
         try {
