@@ -1,5 +1,6 @@
 package com.github.gadzooks.data;
 
+import com.github.gadzooks.data.entities.Bank;
 import com.github.gadzooks.data.entities.User;
 import lombok.Getter;
 import org.hibernate.SessionFactory;
@@ -16,6 +17,7 @@ public class HibernateUtils {
         try {
             Configuration configuration = new Configuration();
             configuration.addAnnotatedClass(User.class);
+            configuration.addAnnotatedClass(Bank.class);
             return configuration.
                     buildSessionFactory(new StandardServiceRegistryBuilder()
                             .build());

@@ -10,12 +10,11 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-//@Setter(value = AccessLevel.PACKAGE)
 @Setter
+@ToString
+@Access(value = AccessType.FIELD)
 @Entity
 @Table(name = "FINANCES_USER")
-@Access(value = AccessType.FIELD)
-@ToString
 //NOTE : using lombok builder with JPA entity
 //https://stackoverflow.com/questions/34241718/lombok-builder-and-jpa-default-constructor/35602246#35602246
 public class User {
@@ -40,17 +39,14 @@ public class User {
     @Column(name = "EMAIL_ADDRESS", nullable = false)
     private String emailAddress;
 
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(name = "LAST_UPDATED_DATE")
-    private Date lastUpdatedDate;
+    @Embedded
+    private AuditFields auditFields;
 
-    @Column(name = "LAST_UPDATED_BY")
-    private String lastUpdatedBy;
-
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_DATE", updatable = false)
-    private Date createdDate;
-
-    @Column(name = "CREATED_BY", updatable = false)
-    private String createdBy;
+    @AttributeOverrides({
+            @AttributeOverride(name="addressLine1", column=@Column(name = "USER_ADDRESS_LINE_1")),
+            @AttributeOverride(name="addressLine2", column=@Column(name = "USER_ADDRESS_LINE_2")),
+            @AttributeOverride(name="zip", column=@Column(name = "ZIP_CODE")),
+    })
+    @Embedded
+    private Address address;
 }
