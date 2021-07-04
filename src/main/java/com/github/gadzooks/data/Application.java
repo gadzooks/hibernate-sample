@@ -7,7 +7,7 @@ import com.github.gadzooks.data.entities.User;
 import org.hibernate.Session;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 public class Application {
     public static void main(String[] args) {
@@ -39,7 +39,7 @@ public class Application {
                         build()).
                 isInternational(true).
                 addressType(Bank.AddressType.PRIMARY).
-                contacts(List.of("c1", "c2")).
+                contacts(Map.of("MANAGER", "Kim", "TELLER", "Amit")).
                 build();
 
         session.save(bank);

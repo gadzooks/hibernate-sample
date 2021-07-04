@@ -3,7 +3,7 @@ package com.github.gadzooks.data.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,10 +39,19 @@ public class Bank {
     private AddressType addressType;
 
     // table BANK_CONTACT has FK BANK_ID, and VARCHAR NAME to store the contact name
-    // this works for List and Set. It will NOT work for Map type
+    // Example for using List or Set
+//    @ElementCollection
+//    @CollectionTable(name = "BANK_CONTACT", joinColumns = @JoinColumn(name = "BANK_ID"))
+//    @Column(name = "NAME")
+//    private List<String> contacts;
+
+    // table BANK_CONTACT has FK BANK_ID, and VARCHAR NAME to store the contact name
+    // Example for using Map
     @ElementCollection
     @CollectionTable(name = "BANK_CONTACT", joinColumns = @JoinColumn(name = "BANK_ID"))
     @Column(name = "NAME")
-    private List<String> contacts;
+    @MapKeyColumn(name = "POSITION_TYPE")
+    private Map<String, String> contacts;
+
 
 }
