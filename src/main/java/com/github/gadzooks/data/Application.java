@@ -27,11 +27,13 @@ public class Application {
         bankService.update(retrievedBank, retrievedBank.getBankId());
 
         log.info("updated name is : " + bankService.findById(retrievedBank.getBankId()).getName());
+        bankService.delete(retrievedBank.getBankId());
 
         UserCrudService userService = new UserCrudService(sessionFactory);
         User user = createUser();
         User savedUser = userService.save(user);
         log.info("saved user is : " + savedUser);
+        userService.delete(savedUser.getUserId());
 
 //        User dbUser = session.get(User.class, 1L);
 //        System.out.println(dbUser);

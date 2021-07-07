@@ -31,6 +31,11 @@ public class BankCrudService implements CrudService<Bank, Long> {
         return bankCrudRepository.update(entity, aLong);
     }
 
+    @Override
+    public void delete(Long aLong) {
+        bankCrudRepository.delete(aLong);
+    }
+
     public static Bank createBank() {
         return Bank.builder().name("my bank").
                 address(Address.builder().

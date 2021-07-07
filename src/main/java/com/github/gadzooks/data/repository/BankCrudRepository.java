@@ -1,9 +1,11 @@
 package com.github.gadzooks.data.repository;
 
 import com.github.gadzooks.data.entities.Bank;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+@Slf4j
 public class BankCrudRepository implements CrudRepository<Bank, Long>{
     private final SessionFactory sessionFactory;
 
@@ -48,5 +50,16 @@ public class BankCrudRepository implements CrudRepository<Bank, Long>{
             session.getTransaction().commit();
         }
         return null;
+    }
+
+    @Override
+    public void delete(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Bank bank = session.get(Bank.class, id);
+            session.delete(bank);
+            log.info("deleting bank : " + bank.getName());
+            session.getTransaction().commit();
+        }
     }
 }

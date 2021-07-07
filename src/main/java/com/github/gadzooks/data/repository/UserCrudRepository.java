@@ -32,4 +32,14 @@ public class UserCrudRepository implements CrudRepository<User, Long>{
     public User update(User entity, Long aLong) {
         return null;
     }
+
+    @Override
+    public void delete(Long id) {
+        try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            User user = session.get(User.class, id);
+            session.delete(user);
+            session.getTransaction().commit();
+        }
+    }
 }

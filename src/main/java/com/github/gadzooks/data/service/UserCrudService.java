@@ -31,6 +31,11 @@ public class UserCrudService implements CrudService<User, Long> {
         return null;
     }
 
+    @Override
+    public void delete(Long aLong) {
+        userCrudRepository.delete(aLong);
+    }
+
     public static User createUser() {
         List<Address> addresses = List.of(
                 Address.builder().
