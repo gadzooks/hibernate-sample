@@ -7,13 +7,14 @@ import com.github.gadzooks.data.entities.User;
 import org.hibernate.Session;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public class Application {
     public static void main(String[] args) {
         Session session = HibernateUtils.getSessionFactory().openSession();
 //        createUser(session);
-        createBank(session);
+//        createBank(session);
 
         session.beginTransaction();
         User dbUser = session.get(User.class, 1L);
@@ -25,6 +26,8 @@ public class Application {
 
     private static void createBank(Session session) {
         session.beginTransaction();
+
+
         Bank bank = Bank.builder().name("my bank").
                 address(Address.builder().
                         addressLine1("line1").
@@ -48,6 +51,20 @@ public class Application {
 
     private static void createUser(Session session) {
         session.beginTransaction();
+
+        List<Address> addresses = List.of(
+                Address.builder().
+                        addressLine1("10041 42nd ave sw").
+                        addressLine2("--").
+                        city("seattle").state("WA").zip("98146").
+                        build(),
+                Address.builder().
+                        addressLine1("2589 ne jewell ln").
+                        addressLine2("--").
+                        city("issaquah").state("WA").zip("98029").
+                        build()
+        );
+
         User user = User.builder().
                 firstName("amit").
                 lastName("karwande").
@@ -62,10 +79,7 @@ public class Application {
                                 build()
 
                 ).
-                address(Address.builder().
-                        addressLine1("line1").
-                        addressLine2("line2").
-                        build()).
+                addresses(addresses).
                 build();
         session.save(user);
         session.getTransaction().commit();

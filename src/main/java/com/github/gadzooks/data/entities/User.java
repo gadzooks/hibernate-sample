@@ -5,6 +5,7 @@ import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Builder(toBuilder = true)
 @Getter
@@ -42,11 +43,20 @@ public class User {
     @Embedded
     private AuditFields auditFields;
 
-    @AttributeOverrides({
-            @AttributeOverride(name="addressLine1", column=@Column(name = "USER_ADDRESS_LINE_1")),
-            @AttributeOverride(name="addressLine2", column=@Column(name = "USER_ADDRESS_LINE_2")),
-            @AttributeOverride(name="zip", column=@Column(name = "ZIP_CODE")),
-    })
-    @Embedded
-    private Address address;
+    // Example of Embedded address
+//    @AttributeOverrides({
+//            @AttributeOverride(name="addressLine1", column=@Column(name = "USER_ADDRESS_LINE_1")),
+//            @AttributeOverride(name="addressLine2", column=@Column(name = "USER_ADDRESS_LINE_2")),
+//            @AttributeOverride(name="zip", column=@Column(name = "ZIP_CODE")),
+//    })
+//    @Embedded
+//    private Address address;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "USER_ADDRESS", joinColumns = @JoinColumn(name = "USER_ID"))
+    @AttributeOverride(name="addressLine1", column=@Column(name = "USER_ADDRESS_LINE_1"))
+    @AttributeOverride(name="addressLine2", column=@Column(name = "USER_ADDRESS_LINE_2"))
+    @AttributeOverride(name="zip", column=@Column(name = "ZIP_CODE"))
+    private List<Address> addresses;
+
 }

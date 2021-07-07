@@ -21,6 +21,8 @@ public class Bank {
     @Column(name = "NAME")
     private String name;
 
+    //example of embedded type
+    @Embedded
     @AttributeOverride(name = "zip", column = @Column(name = "ZIP_CODE"))
     private Address address;
 
