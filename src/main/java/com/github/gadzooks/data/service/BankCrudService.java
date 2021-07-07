@@ -26,6 +26,11 @@ public class BankCrudService implements CrudService<Bank, Long> {
         return bankCrudRepository.findById(aLong);
     }
 
+    @Override
+    public Bank update(Bank entity, Long aLong) {
+        return bankCrudRepository.update(entity, aLong);
+    }
+
     public static Bank createBank() {
         return Bank.builder().name("my bank").
                 address(Address.builder().

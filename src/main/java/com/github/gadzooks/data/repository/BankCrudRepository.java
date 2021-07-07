@@ -31,4 +31,22 @@ public class BankCrudRepository implements CrudRepository<Bank, Long>{
             return session.get(Bank.class, id);
         }
     }
+
+    @Override
+    public Bank update(Bank entity, Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Bank bank = session.get(Bank.class, id);
+
+            // do this for all the attributes
+            if(bank.getIsInternational() != entity.getIsInternational())
+                bank.setIsInternational(entity.getIsInternational());
+            if(!bank.getName().equals(entity.getName()))
+                bank.setName(entity.getName());
+
+            //save bank
+            session.getTransaction().commit();
+        }
+        return null;
+    }
 }

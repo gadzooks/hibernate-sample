@@ -23,6 +23,11 @@ public class Application {
         Bank retrievedBank = bankService.findById(savedBank.getBankId());
         log.info("retrieved bank for id " + retrievedBank);
 
+        retrievedBank.setName("new name");
+        bankService.update(retrievedBank, retrievedBank.getBankId());
+
+        log.info("updated name is : " + bankService.findById(retrievedBank.getBankId()).getName());
+
         UserCrudService userService = new UserCrudService(sessionFactory);
         User user = createUser();
         User savedUser = userService.save(user);

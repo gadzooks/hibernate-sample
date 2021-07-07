@@ -26,6 +26,11 @@ public class UserCrudService implements CrudService<User, Long> {
         return userCrudRepository.findById(id);
     }
 
+    @Override
+    public User update(User entity, Long aLong) {
+        return null;
+    }
+
     public static User createUser() {
         List<Address> addresses = List.of(
                 Address.builder().

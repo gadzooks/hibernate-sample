@@ -27,4 +27,9 @@ public class UserCrudRepository implements CrudRepository<User, Long>{
             return session.get(User.class, id);
         }
     }
+
+    @Override
+    public User update(User entity, Long aLong) {
+        return null;
+    }
 }
