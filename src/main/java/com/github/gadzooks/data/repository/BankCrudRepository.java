@@ -13,11 +13,22 @@ public class BankCrudRepository implements CrudRepository<Bank, Long>{
 
     @Override
     public Bank save(Bank entity) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.save(entity);
-        session.getTransaction().commit();
-        session.close();
+        //Session extends AutoCloseable
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.save(entity);
+            session.getTransaction().commit();
+        }
+
         return entity;
+    }
+
+    @Override
+    public Bank findById(Long id) {
+        //Session extends AutoCloseable
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            return session.get(Bank.class, id);
+        }
     }
 }

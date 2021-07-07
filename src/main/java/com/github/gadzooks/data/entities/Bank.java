@@ -49,7 +49,7 @@ public class Bank {
 
     // table BANK_CONTACT has FK BANK_ID, and VARCHAR NAME to store the contact name
     // Example for using Map
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "BANK_CONTACT", joinColumns = @JoinColumn(name = "BANK_ID"))
     @Column(name = "NAME")
     @MapKeyColumn(name = "POSITION_TYPE")

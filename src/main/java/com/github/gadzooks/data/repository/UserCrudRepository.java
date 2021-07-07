@@ -13,10 +13,18 @@ public class UserCrudRepository implements CrudRepository<User, Long>{
 
     @Override
     public User save(User entity) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.save(entity);
-        session.getTransaction().commit();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.save(entity);
+            session.getTransaction().commit();
+        }
         return entity;
+    }
+
+    @Override
+    public User findById(Long id) {
+        try(Session session = sessionFactory.openSession()) {
+            return session.get(User.class, id);
+        }
     }
 }

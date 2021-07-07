@@ -20,6 +20,9 @@ public class Application {
         Bank savedBank = bankService.save(bank);
         log.info("saved bank is : " + savedBank);
 
+        Bank retrievedBank = bankService.findById(savedBank.getBankId());
+        log.info("retrieved bank for id " + retrievedBank);
+
         UserCrudService userService = new UserCrudService(sessionFactory);
         User user = createUser();
         User savedUser = userService.save(user);
