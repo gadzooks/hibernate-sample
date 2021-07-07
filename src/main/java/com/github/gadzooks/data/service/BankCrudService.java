@@ -4,7 +4,6 @@ import com.github.gadzooks.data.entities.Address;
 import com.github.gadzooks.data.entities.AuditFields;
 import com.github.gadzooks.data.entities.Bank;
 import com.github.gadzooks.data.repository.BankCrudRepository;
-import org.hibernate.SessionFactory;
 
 import java.util.Date;
 import java.util.Map;
@@ -12,8 +11,8 @@ import java.util.Map;
 public class BankCrudService implements CrudService<Bank, Long> {
     private final BankCrudRepository bankCrudRepository;
 
-    public BankCrudService(SessionFactory sessionFactory) {
-        this.bankCrudRepository = new BankCrudRepository(sessionFactory);
+    public BankCrudService(BankCrudRepository repository) {
+        this.bankCrudRepository = repository;
     }
 
     @Override

@@ -13,6 +13,8 @@ public class HibernateUtils {
     @Getter
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
+    public static final String PERSISTENCE_UNIT_NAME = "infinite-skills-pu";
+
     private static SessionFactory buildSessionFactory() {
         try {
             Configuration configuration = new Configuration();

@@ -4,7 +4,6 @@ import com.github.gadzooks.data.entities.Address;
 import com.github.gadzooks.data.entities.AuditFields;
 import com.github.gadzooks.data.entities.User;
 import com.github.gadzooks.data.repository.UserCrudRepository;
-import org.hibernate.SessionFactory;
 
 import java.util.Date;
 import java.util.List;
@@ -12,8 +11,8 @@ import java.util.List;
 public class UserCrudService implements CrudService<User, Long> {
     private final UserCrudRepository userCrudRepository;
 
-    public UserCrudService(SessionFactory sessionFactory) {
-        this.userCrudRepository = new UserCrudRepository(sessionFactory);
+    public UserCrudService(UserCrudRepository crudRepository) {
+        this.userCrudRepository = crudRepository;
     }
 
     @Override
