@@ -57,8 +57,10 @@ public class BankCrudRepository implements CrudRepository<Bank, Long>{
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             Bank bank = session.get(Bank.class, id);
-            session.delete(bank);
+            log.info(String.valueOf(session.contains("Bank",bank )));
             log.info("deleting bank : " + bank.getName());
+            session.delete(bank);
+            log.info(String.valueOf(session.contains("Bank",bank )));
             session.getTransaction().commit();
         }
     }
