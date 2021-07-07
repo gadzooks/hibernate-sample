@@ -1,87 +1,32 @@
 package com.github.gadzooks.data;
 
-import com.github.gadzooks.data.entities.Address;
-import com.github.gadzooks.data.entities.AuditFields;
 import com.github.gadzooks.data.entities.Bank;
 import com.github.gadzooks.data.entities.User;
-import org.hibernate.Session;
+import com.github.gadzooks.data.service.BankCrudService;
+import com.github.gadzooks.data.service.UserCrudService;
+import org.hibernate.SessionFactory;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import static com.github.gadzooks.data.service.BankCrudService.createBank;
+import static com.github.gadzooks.data.service.UserCrudService.createUser;
 
 public class Application {
     public static void main(String[] args) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-//        createUser(session);
-//        createBank(session);
+        SessionFactory sessionFactory = HibernateUtils.getSessionFactory();
 
-        session.beginTransaction();
-        User dbUser = session.get(User.class, 1L);
-        System.out.println(dbUser);
-        session.getTransaction().commit();
+        BankCrudService bankService = new BankCrudService(sessionFactory);
+        Bank bank = createBank();
+        Bank savedBank = bankService.save(bank);
+        System.out.println("saved bank is : " + savedBank);
 
-        session.close();
+        UserCrudService userService = new UserCrudService(sessionFactory);
+        User user = createUser();
+        User savedUser = userService.save(user);
+        System.out.println("saved user is : " + savedUser);
+
+//        User dbUser = session.get(User.class, 1L);
+//        System.out.println(dbUser);
     }
 
-    private static void createBank(Session session) {
-        session.beginTransaction();
 
 
-        Bank bank = Bank.builder().name("my bank").
-                address(Address.builder().
-                        addressLine1("line1").
-                        addressLine2("line2").
-                        city("seattle").state("WA").zip("98029").
-                        build()).
-                auditFields(AuditFields.builder().
-                        createdBy("system").
-                        createdDate(new Date()).
-                        lastUpdatedBy("system").
-                        lastUpdatedDate(new Date()).
-                        build()).
-                isInternational(true).
-                addressType(Bank.AddressType.PRIMARY).
-                contacts(Map.of("MANAGER", "Kim", "TELLER", "Amit")).
-                build();
-
-        session.save(bank);
-        session.getTransaction().commit();
-    }
-
-    private static void createUser(Session session) {
-        session.beginTransaction();
-
-        List<Address> addresses = List.of(
-                Address.builder().
-                        addressLine1("10041 42nd ave sw").
-                        addressLine2("--").
-                        city("seattle").state("WA").zip("98146").
-                        build(),
-                Address.builder().
-                        addressLine1("2589 ne jewell ln").
-                        addressLine2("--").
-                        city("issaquah").state("WA").zip("98029").
-                        build()
-        );
-
-        User user = User.builder().
-                firstName("amit").
-                lastName("karwande").
-                emailAddress("foo@bar.com").
-                birthDate(new Date()).
-                auditFields(
-                        AuditFields.builder().
-                                createdBy("someone").
-                                createdDate(new Date()).
-                                lastUpdatedBy("amit").
-                                lastUpdatedDate(new Date()).
-                                build()
-
-                ).
-                addresses(addresses).
-                build();
-        session.save(user);
-        session.getTransaction().commit();
-    }
 }
