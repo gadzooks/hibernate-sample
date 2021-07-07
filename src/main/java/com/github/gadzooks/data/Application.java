@@ -5,11 +5,30 @@ import com.github.gadzooks.data.service.BankCrudService;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
 import static com.github.gadzooks.data.service.BankCrudService.createBank;
 
 @Slf4j
 public class Application {
     public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("infinite-skills-pu");
+        EntityManager em = emf.createEntityManager();
+
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        Bank bank = createBank();
+        em.persist(bank);
+        log.info("saved bank is : " + bank);
+        tx.commit();
+        em.close();
+        emf.close();
+    }
+
+    public static void main_with_hibernate(String[] args) {
         SessionFactory sessionFactory = HibernateUtils.getSessionFactory();
 
         BankCrudService bankService = new BankCrudService(sessionFactory);
