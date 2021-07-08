@@ -1,21 +1,30 @@
 package com.github.gadzooks.data.repository.jpa;
 
+import com.github.gadzooks.data.HibernateUtils;
 import com.github.gadzooks.data.entities.Bank;
 import com.github.gadzooks.data.repository.BankCrudRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import static com.github.gadzooks.data.HibernateUtils.PERSISTENCE_UNIT_NAME;
 
 @Slf4j
 public class BankCrudRepositoryImpl implements BankCrudRepository {
+    public Bank saveUsingSession(Bank entity) {
+        EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
+
+        //NOTE : how to get session from EntityManager
+        try(Session session = em.unwrap(Session.class)) {
+            session.beginTransaction();
+            session.save(entity);
+            session.getTransaction().commit();
+            return entity;
+        }
+    }
+
     @Override
     public Bank save(Bank entity) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
 
         //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
         try {
@@ -24,7 +33,6 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
             em.getTransaction().commit();
         } finally {
             em.close();
-            emf.close();
         }
 
         return entity;
@@ -32,8 +40,7 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
 
     @Override
     public Bank findById(Long id) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
 
         //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
         try {
@@ -43,14 +50,12 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
             return entity;
         } finally {
             em.close();
-            emf.close();
         }
     }
 
     @Override
     public Bank update(Bank entity, Long id) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
 
         //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
         try {
@@ -68,14 +73,12 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
             return bank;
         } finally {
             em.close();
-            emf.close();
         }
     }
 
     @Override
     public void delete(Long id) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
 
         //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
         try {
@@ -85,7 +88,6 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
             em.getTransaction().commit();
         } finally {
             em.close();
-            emf.close();
         }
     }
 }

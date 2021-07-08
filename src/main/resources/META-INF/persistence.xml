@@ -2,8 +2,23 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              version="2.1"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="infinite-skills-pu">
+
+    <!--    transaction types are : JTA, RESOURCE_LOCAL-->
+    <persistence-unit name="infinite-skills-pu" transaction-type="RESOURCE_LOCAL">
+        <description>
+            Example of a Hibernate based persistence context.
+        </description>
+
+        <!-- provider : specify who implements the JPA interface. Ex: hibernate -->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!--  cache only the entities annotated with @Cacheable or @Cacheable(true) -->
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+
+        <!--  AUTO – Perform the validation if a bean validation implementation is available (default)
+              CALLBACK– Activate the validation and throw an exception if no bean validation implementation is available
+              NONE – Do not perform any validation  -->
+        <validation-mode>NONE</validation-mode>
         <properties>
             <!-- JPA properties -->
             <property name="javax.persistence.jdbc.user" value="infinite"/>
@@ -14,8 +29,14 @@
             <!-- hibernate specific properties-->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL55Dialect"/>
             <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true" />
 
+
+            <!--  time out in milliseconds -->
+            <property name="javax.persistence.query.timeout" value="100"/>
+            <property name="javax.persistence.lock.timeout" value="100"/>
         </properties>
+
 
 
     </persistence-unit>

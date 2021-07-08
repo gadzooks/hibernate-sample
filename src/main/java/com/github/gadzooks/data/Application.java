@@ -20,7 +20,7 @@ public class Application {
         withHibernate(args);
    }
 
-    public static void example_jpa_save() {
+    public static void exampleJpaSave() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("infinite-skills-pu");
         EntityManager em = emf.createEntityManager();
 

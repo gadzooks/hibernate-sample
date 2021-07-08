@@ -24,9 +24,13 @@ public class User {
     @Column(name = "USER_ID")
     private Long userId;
 
+//    @NotNull
+//    @Size(min = 2, max = 256)
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
 
+//    @NotNull
+//    @Size(min = 2, max = 256)
     @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
 
@@ -37,6 +41,7 @@ public class User {
     @Column(name = "BIRTH_DATE", nullable = false)
     private Date birthDate;
 
+//    @NotNull
     @Column(name = "EMAIL_ADDRESS", nullable = false)
     private String emailAddress;
 

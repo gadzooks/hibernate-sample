@@ -19,6 +19,8 @@ public class Bank {
     @Column(name = "BANK_ID")
     private Long bankId;
 
+//    @NotNull
+//    @Size(min = 2, max = 256)
     @Column(name = "NAME")
     private String name;
 
