@@ -6,6 +6,7 @@ import com.github.gadzooks.data.repository.BankCrudRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 @Slf4j
 public class BankCrudRepositoryImpl implements BankCrudRepository {
@@ -17,11 +18,17 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
 
     @Override
     public Bank save(Bank entity) {
+        Transaction tx = null;
         //Session extends AutoCloseable
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+            tx = session.getTransaction();
+            tx.begin();
             session.save(entity);
-            session.getTransaction().commit();
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null) tx.rollback();
+            e.printStackTrace();
+            log.info(e.getMessage());
         }
 
         return entity;
@@ -38,8 +45,10 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
 
     @Override
     public Bank update(Bank entity, Long id) {
+        Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
+            tx = session.getTransaction();
+            tx.begin();
             Bank bank = session.get(Bank.class, id);
 
             // do this for all the attributes
@@ -49,7 +58,11 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
                 bank.setName(entity.getName());
 
             //save bank
-            session.getTransaction().commit();
+            tx.commit();
+        } catch (Exception e) {
+            if(tx != null) tx.rollback();
+            e.printStackTrace();
+            log.info(e.getMessage());
         }
         return null;
     }
