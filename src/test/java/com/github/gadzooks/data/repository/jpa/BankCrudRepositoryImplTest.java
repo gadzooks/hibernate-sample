@@ -23,6 +23,7 @@ class BankCrudRepositoryImplTest {
         Assertions.assertNull(transientState.getBankId());
         Bank savedState = jpaBankRepo.save(transientState);
         Assertions.assertNotNull(savedState.getBankId());
+        jpaBankRepo.delete(savedState.getBankId());
     }
 
     @Test

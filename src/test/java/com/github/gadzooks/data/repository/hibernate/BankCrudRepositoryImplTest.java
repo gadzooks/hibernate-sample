@@ -18,11 +18,12 @@ class BankCrudRepositoryImplTest {
     }
 
     @Test
-    void save() {
+    void saveAndDelete() {
         Bank transientState = createBank();
         Assertions.assertNull(transientState.getBankId());
         Bank savedState = hibernateBankRepo.save(transientState);
         Assertions.assertNotNull(savedState.getBankId());
+        hibernateBankRepo.delete(savedState.getBankId());
     }
 
     @Test
@@ -33,7 +34,4 @@ class BankCrudRepositoryImplTest {
     void update() {
     }
 
-    @Test
-    void delete() {
-    }
 }

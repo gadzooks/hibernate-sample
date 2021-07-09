@@ -1,6 +1,7 @@
 package com.github.gadzooks.data;
 
 import com.github.gadzooks.data.entities.Bank;
+import com.github.gadzooks.data.entities.Currency;
 import com.github.gadzooks.data.entities.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -48,6 +49,8 @@ public class HibernateUtils {
             Configuration configuration = new Configuration();
             configuration.addAnnotatedClass(User.class);
             configuration.addAnnotatedClass(Bank.class);
+            configuration.addAnnotatedClass(Currency.class);
+//            configuration.addAnnotatedClass(CurrencyId.class);
             // register to close on jvm exit
 
             //Set up the service registry
@@ -55,8 +58,8 @@ public class HibernateUtils {
 
             SessionFactory sessionFactory = configuration.buildSessionFactory(standardServiceRegistry);
 
-            Runtime.getRuntime().addShutdownHook(new Thread(){
-                public void run(){
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                public void run() {
                     log.info("SHUTDOWN HOOK - CLOSE SessionFactory");
                     sessionFactory.close();
                 }
