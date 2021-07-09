@@ -1,4 +1,4 @@
-package com.github.gadzooks.data.repository.hibernate;
+package com.github.gadzooks.data.repository.jpa;
 
 import com.github.gadzooks.data.entities.Bank;
 import com.github.gadzooks.data.repository.BankCrudRepository;
@@ -10,18 +10,18 @@ import static com.github.gadzooks.data.service.BankCrudService.createBank;
 
 class BankCrudRepositoryImplTest {
 
-    private static BankCrudRepository hibernateBankRepo;
+    private static BankCrudRepository jpaBankRepo;
 
     @BeforeAll
-    static void setup() {
-        hibernateBankRepo = new BankCrudRepositoryImpl();
+    static void setUp() {
+        jpaBankRepo = new BankCrudRepositoryImpl();
     }
 
     @Test
     void save() {
         Bank transientState = createBank();
         Assertions.assertNull(transientState.getBankId());
-        Bank savedState = hibernateBankRepo.save(transientState);
+        Bank savedState = jpaBankRepo.save(transientState);
         Assertions.assertNotNull(savedState.getBankId());
     }
 
