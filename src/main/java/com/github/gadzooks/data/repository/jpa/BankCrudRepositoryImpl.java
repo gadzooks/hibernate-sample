@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 @Slf4j
 public class BankCrudRepositoryImpl implements BankCrudRepository {
@@ -25,13 +26,21 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
     @Override
     public Bank save(Bank entity) {
         EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
+        EntityTransaction tx = null;
 
         //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
         try {
-            em.getTransaction().begin();
+            tx = em.getTransaction();
+            tx.begin();
             em.persist(entity);
             em.getTransaction().commit();
-        } finally {
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            if(tx != null) tx.rollback();
+        }
+        finally {
             em.close();
         }
 
@@ -56,10 +65,12 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
     @Override
     public Bank update(Bank entity, Long id) {
         EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
+        EntityTransaction tx = null;
 
         //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
         try {
-            em.getTransaction().begin();
+            tx = em.getTransaction();
+            tx.begin();
             Bank bank = em.find(Bank.class, id);
 
             // do this for all the attributes
@@ -71,9 +82,16 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
             em.persist(bank);
             em.getTransaction().commit();
             return bank;
-        } finally {
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            if(tx != null) tx.rollback();
+        }
+        finally {
             em.close();
         }
+        return null;
     }
 
     @Override
