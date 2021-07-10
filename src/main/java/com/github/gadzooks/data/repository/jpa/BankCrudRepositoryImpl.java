@@ -9,6 +9,9 @@ public class BankCrudRepositoryImpl extends AbstractJpaCrudRepository<Bank, Long
 
     @Override
     protected void updateEntity(Bank update, Bank updateFrom) {
-
+        if (update.getIsInternational() != updateFrom.getIsInternational())
+            update.setIsInternational(updateFrom.getIsInternational());
+        if (!update.getName().equals(updateFrom.getName()))
+            update.setName(updateFrom.getName());
     }
 }

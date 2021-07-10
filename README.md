@@ -70,18 +70,35 @@ private static EntityManagerFactory createEntityManagerFactory() {
 
 ## CRUD Repository implementations :
 
-### Using Hibernate APIs
+CRUD Repository interface
 
 ```java
-public class BankCrudRepositoryImpl implements BankCrudRepository {
-    private final SessionFactory sessionFactory;
+public interface CrudRepository<TD, ID> {
+    TD save(TD entity);
+    TD findById(ID id);
+    TD update(TD entity, ID id);
+    void delete(ID id);
+}
+```
 
-    public BankCrudRepositoryImpl() {
+### Using Hibernate APIs and abstract class
+
+```java
+public abstract class AbstractHibernateRepository<TD, ID extends Serializable> implements CrudRepository<TD, ID> {
+    private final SessionFactory sessionFactory;
+    private final Class<TD> persistentClass;
+
+    //Derived classes need to implement this method
+    protected abstract void updateEntity(TD update, TD updateFrom);
+
+    @SuppressWarnings("unchecked")
+    public AbstractHibernateRepository() {
+        this.persistentClass = (Class<TD>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         this.sessionFactory = HibernateUtils.getSessionFactory();
     }
 
     @Override
-    public Bank save(Bank entity) {
+    public TD save(TD entity) {
         Transaction tx = null;
         //Session extends AutoCloseable
         try (Session session = sessionFactory.openSession()) {
@@ -90,30 +107,50 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
             session.save(entity);
             tx.commit();
         } catch (Exception e) {
-            if(tx != null) tx.rollback();
+            if (tx != null) tx.rollback();
             e.printStackTrace();
             log.info(e.getMessage());
         }
 
         return entity;
     }
-    
-    //other CRUD methods
+
+    //other crud methods
 }
 ```
 
-### Using JPA APIs
+Now we can implement the BankCrudRepository very easily
 
 ```java
-public class BankCrudRepositoryImpl implements BankCrudRepository {
-    private final EntityManagerFactory emf;
+public class BankCrudRepositoryImpl extends AbstractHibernateCrudRepository<Bank, Long> implements BankCrudRepository {
 
-    public BankCrudRepositoryImpl() {
+    @Override
+    protected void updateEntity(Bank update, Bank updateFrom) {
+        if(update.getIsInternational() != updateFrom.getIsInternational())
+            update.setIsInternational(updateFrom.getIsInternational());
+        if(!update.getName().equals(updateFrom.getName()))
+            update.setName(updateFrom.getName());
+    }
+```
+
+### Using JPA APIs and abstract class
+
+```java
+public abstract class AbstractJpaCrudRepository<TD, ID> implements CrudRepository<TD, ID> {
+    private final EntityManagerFactory emf;
+    private final Class<TD> persistentClass;
+
+    //Derived classes need to implement this method
+    protected abstract void updateEntity(TD update, TD updateFrom);
+    
+    @SuppressWarnings("unchecked")
+    public AbstractJpaCrudRepository() {
         emf = HibernateUtils.getEntityManagerFactory();
+        this.persistentClass = (Class<TD>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     @Override
-    public Bank save(Bank entity) {
+    public TD save(TD entity) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = null;
 
@@ -133,8 +170,22 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
 
         return entity;
     }
-    //other CRUD methods
+    // other CRUD operations
 }
+```
+
+Now we can implement a BankCrudRepository very easily
+
+```java
+public class BankCrudRepositoryImpl extends AbstractJpaCrudRepository<Bank, Long> implements BankCrudRepository {
+
+    @Override
+    protected void updateEntity(Bank update, Bank updateFrom) {
+        if(update.getIsInternational() != updateFrom.getIsInternational())
+            update.setIsInternational(updateFrom.getIsInternational());
+        if(!update.getName().equals(updateFrom.getName()))
+            update.setName(updateFrom.getName());
+    }
 ```
 
 ## Annotations :
