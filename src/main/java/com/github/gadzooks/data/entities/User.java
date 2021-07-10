@@ -16,6 +16,7 @@ import java.util.List;
 @Access(value = AccessType.FIELD)
 @Entity
 @Table(name = "FINANCES_USER")
+@NamedQuery(name = "User.count", query = "select count(*) from User")
 //NOTE : using lombok builder with JPA entity
 //https://stackoverflow.com/questions/34241718/lombok-builder-and-jpa-default-constructor/35602246#35602246
 public class User {

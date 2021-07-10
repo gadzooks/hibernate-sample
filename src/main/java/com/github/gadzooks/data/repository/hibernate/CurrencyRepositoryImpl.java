@@ -12,4 +12,9 @@ public class CurrencyRepositoryImpl extends AbstractHibernateRepository<Currency
     protected void updateEntity(Currency update, Currency updateFrom) {
 
     }
+
+    @Override
+    protected String namedQueryForCount() {
+        return "Currency.count";
+    }
 }

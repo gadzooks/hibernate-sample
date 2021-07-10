@@ -9,4 +9,9 @@ public class UserCrudRepositoryImpl extends AbstractHibernateRepository<User, Lo
     protected void updateEntity(User update, User updateFrom) {
 
     }
+
+    @Override
+    protected String namedQueryForCount() {
+        return "User.count";
+    }
 }

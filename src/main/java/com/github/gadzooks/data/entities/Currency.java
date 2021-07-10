@@ -14,6 +14,7 @@ import javax.persistence.*;
 @IdClass(value = CurrencyId.class)
 @Entity
 @Table(name = "CURRENCY")
+@NamedQuery(name = "Currency.count", query = "select count(*) from Currency")
 public class Currency {
 
     //NOTE : NAME, COUNTRY_NAME Form the compound primary key

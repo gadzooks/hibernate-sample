@@ -2,16 +2,19 @@ package com.github.gadzooks.data.repository.jpa;
 
 import com.github.gadzooks.data.HibernateUtils;
 import com.github.gadzooks.data.repository.CrudRepository;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import java.lang.reflect.ParameterizedType;
 
 @Slf4j
 public abstract class AbstractJpaCrudRepository<TD, ID> implements CrudRepository<TD, ID> {
+    @Getter
     private final EntityManagerFactory emf;
     private final Class<TD> persistentClass;
 
@@ -20,6 +23,10 @@ public abstract class AbstractJpaCrudRepository<TD, ID> implements CrudRepositor
         emf = HibernateUtils.getEntityManagerFactory();
         this.persistentClass = (Class<TD>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
+
+    protected abstract void updateEntity(TD update, TD updateFrom);
+
+    protected abstract String namedQueryForCount();
 
     public TD saveUsingSession(TD entity) {
         EntityManager em = emf.createEntityManager();
@@ -30,6 +37,19 @@ public abstract class AbstractJpaCrudRepository<TD, ID> implements CrudRepositor
             session.save(entity);
             session.getTransaction().commit();
             return entity;
+        }
+    }
+
+    @Override
+    public Long size() {
+        EntityManager em = getEmf().createEntityManager();
+
+        //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
+        try {
+            Query query = em.createNamedQuery(namedQueryForCount());
+            return (Long) query.getSingleResult();
+        } finally {
+            em.close();
         }
     }
 
@@ -61,16 +81,12 @@ public abstract class AbstractJpaCrudRepository<TD, ID> implements CrudRepositor
 
         //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
         try {
-            em.getTransaction().begin();
-            TD entity = em.find(persistentClass, id);
-            em.getTransaction().commit();
-            return entity;
+            return em.find(persistentClass, id);
         } finally {
             em.close();
         }
     }
 
-    protected abstract void updateEntity(TD update, TD updateFrom);
 
     @Override
     public TD update(TD updateFrom, ID id) {
@@ -84,12 +100,6 @@ public abstract class AbstractJpaCrudRepository<TD, ID> implements CrudRepositor
             TD entity = em.find(persistentClass, id);
 
             updateEntity(entity, updateFrom);
-            // do this for all the attributes
-//            if(bank.getIsInternational() != entity.getIsInternational())
-//                bank.setIsInternational(entity.getIsInternational());
-//            if(!bank.getName().equals(entity.getName()))
-//                bank.setName(entity.getName());
-
             em.persist(entity);
             em.getTransaction().commit();
             return entity;

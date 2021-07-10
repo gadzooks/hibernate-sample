@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import javax.persistence.Query;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 
@@ -21,6 +22,25 @@ public abstract class AbstractHibernateRepository<TD, ID extends Serializable> i
     public AbstractHibernateRepository() {
         this.persistentClass = (Class<TD>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         this.sessionFactory = HibernateUtils.getSessionFactory();
+    }
+
+    protected abstract void updateEntity(TD update, TD updateFrom);
+
+    protected abstract String namedQueryForCount();
+
+    @Override
+    public Long size() {
+        Long count = null;
+        //Session extends AutoCloseable
+        try (Session session = getSessionFactory().openSession()) {
+            Query query = session.createNamedQuery(namedQueryForCount());
+            count = (Long) query.getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.info(e.getMessage());
+        }
+
+        return count;
     }
 
     @Override
@@ -49,8 +69,6 @@ public abstract class AbstractHibernateRepository<TD, ID extends Serializable> i
             return session.get(this.getPersistentClass(), id);
         }
     }
-
-    protected abstract void updateEntity(TD update, TD updateFrom);
 
     @Override
     public TD update(TD updatedEntity, ID id) {

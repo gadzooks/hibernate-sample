@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Access(value = AccessType.FIELD)
 @Entity
 @Table(name = "MARKET")
+@NamedQuery(name = "Market.count", query = "select count(*) from Market")
 public class Market {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

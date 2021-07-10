@@ -27,7 +27,9 @@ class BankCrudRepositoryImplTest {
     }
 
     @Test
-    void findById() {
+    void count() {
+        long count = jpaBankRepo.size();
+        Assertions.assertTrue(count > 0);
     }
 
     @Test

@@ -11,4 +11,9 @@ public class MarketRepository extends AbstractHibernateRepository<Market, Long> 
     protected void updateEntity(Market update, Market updateFrom) {
 
     }
+
+    @Override
+    protected String namedQueryForCount() {
+        return "Market.count";
+    }
 }

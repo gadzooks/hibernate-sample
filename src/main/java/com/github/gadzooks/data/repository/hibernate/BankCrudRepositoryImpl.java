@@ -14,4 +14,9 @@ public class BankCrudRepositoryImpl extends AbstractHibernateRepository<Bank, Lo
         if (!update.getName().equals(updateFrom.getName()))
             update.setName(updateFrom.getName());
     }
+
+    @Override
+    protected String namedQueryForCount() {
+        return "Bank.count";
+    }
 }

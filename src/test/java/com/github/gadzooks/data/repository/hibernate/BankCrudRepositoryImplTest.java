@@ -27,7 +27,9 @@ class BankCrudRepositoryImplTest {
     }
 
     @Test
-    void findById() {
+    void size() {
+        long count = hibernateBankRepo.size();
+        Assertions.assertTrue(count > 0);
     }
 
     @Test

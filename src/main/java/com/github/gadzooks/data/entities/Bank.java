@@ -13,6 +13,7 @@ import java.util.Map;
 @ToString
 @Entity
 @Table(name = "BANK")
+@NamedQuery(name = "Bank.count", query = "select count(*) from Bank")
 public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
