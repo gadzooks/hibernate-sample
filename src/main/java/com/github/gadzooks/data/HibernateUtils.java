@@ -2,6 +2,7 @@ package com.github.gadzooks.data;
 
 import com.github.gadzooks.data.entities.Bank;
 import com.github.gadzooks.data.entities.Currency;
+import com.github.gadzooks.data.entities.Market;
 import com.github.gadzooks.data.entities.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -50,6 +51,7 @@ public class HibernateUtils {
             configuration.addAnnotatedClass(User.class);
             configuration.addAnnotatedClass(Bank.class);
             configuration.addAnnotatedClass(Currency.class);
+            configuration.addAnnotatedClass(Market.class);
 //            configuration.addAnnotatedClass(CurrencyId.class);
             // register to close on jvm exit
 
