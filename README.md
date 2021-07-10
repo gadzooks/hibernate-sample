@@ -1,4 +1,4 @@
-# Hibernat and JPA code samples
+# Hibernate and JPA code samples
 
 ## Setup
 
