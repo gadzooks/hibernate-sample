@@ -3,23 +3,10 @@ package com.github.gadzooks.data.repository.jpa;
 import com.github.gadzooks.data.entities.User;
 import com.github.gadzooks.data.repository.UserCrudRepository;
 
-public class UserCrudRepositoryImpl implements UserCrudRepository {
-    @Override
-    public User save(User entity) {
-        return null;
-    }
+public class UserCrudRepositoryImpl extends AbstractJpaCrudRepository<User, Long> implements UserCrudRepository {
 
     @Override
-    public User findById(Long id) {
-        return null;
-    }
+    protected void updateEntity(User update, User updateFrom) {
 
-    @Override
-    public User update(User entity, Long aLong) {
-        return null;
-    }
-
-    @Override
-    public void delete(Long id) {
     }
 }
