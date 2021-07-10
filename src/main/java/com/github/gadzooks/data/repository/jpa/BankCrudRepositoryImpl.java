@@ -7,15 +7,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
 @Slf4j
 public class BankCrudRepositoryImpl implements BankCrudRepository {
+    private final EntityManagerFactory emf;
+
+    public BankCrudRepositoryImpl() {
+        emf = HibernateUtils.getEntityManagerFactory();
+    }
+
     public Bank saveUsingSession(Bank entity) {
-        EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
+        EntityManager em = emf.createEntityManager();
 
         //NOTE : how to get session from EntityManager
-        try(Session session = em.unwrap(Session.class)) {
+        try (Session session = em.unwrap(Session.class)) {
             session.beginTransaction();
             session.save(entity);
             session.getTransaction().commit();
@@ -25,7 +32,7 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
 
     @Override
     public Bank save(Bank entity) {
-        EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
+        EntityManager em = emf.createEntityManager();
         EntityTransaction tx = null;
 
         //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
@@ -49,7 +56,7 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
 
     @Override
     public Bank findById(Long id) {
-        EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
+        EntityManager em = emf.createEntityManager();
 
         //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
         try {
@@ -64,7 +71,7 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
 
     @Override
     public Bank update(Bank entity, Long id) {
-        EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
+        EntityManager em = emf.createEntityManager();
         EntityTransaction tx = null;
 
         //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
@@ -96,7 +103,7 @@ public class BankCrudRepositoryImpl implements BankCrudRepository {
 
     @Override
     public void delete(Long id) {
-        EntityManager em = HibernateUtils.getEntityManagerFactory().createEntityManager();
+        EntityManager em = emf.createEntityManager();
 
         //EntityManagerFactory does not extend AutoCloseable so we need to close connections in finally
         try {

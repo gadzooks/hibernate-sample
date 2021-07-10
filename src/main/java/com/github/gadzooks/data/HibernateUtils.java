@@ -36,12 +36,10 @@ public class HibernateUtils {
     private static EntityManagerFactory createEntityManagerFactory() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(){
-            public void run(){
-                log.info("SHUTDOWN HOOK - CLOSE EntityManagerFactory");
-                emf.close();
-            }
-        });
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            log.info("SHUTDOWN HOOK - CLOSE EntityManagerFactory");
+            emf.close();
+        }));
         return emf;
     }
 
@@ -60,12 +58,10 @@ public class HibernateUtils {
 
             SessionFactory sessionFactory = configuration.buildSessionFactory(standardServiceRegistry);
 
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                public void run() {
-                    log.info("SHUTDOWN HOOK - CLOSE SessionFactory");
-                    sessionFactory.close();
-                }
-            });
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                log.info("SHUTDOWN HOOK - CLOSE SessionFactory");
+                sessionFactory.close();
+            }));
 
             return sessionFactory;
         } catch (Exception e) {
