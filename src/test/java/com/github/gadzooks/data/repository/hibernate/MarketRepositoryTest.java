@@ -4,7 +4,6 @@ import com.github.gadzooks.data.entities.Currency;
 import com.github.gadzooks.data.entities.Market;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class MarketRepositoryTest {
@@ -17,7 +16,6 @@ class MarketRepositoryTest {
     }
 
     @Test
-    @Disabled("java.lang.IllegalStateException: org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@4c07d1fc is closed")
     void delete() {
         Currency indianRupee = Currency.builder().countryName("India").name("Rupee").symbol("Rs").build();
         Market market = Market.builder().marketName("new market").currency(indianRupee).build();
