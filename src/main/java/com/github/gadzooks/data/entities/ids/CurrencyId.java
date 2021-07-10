@@ -1,16 +1,17 @@
 package com.github.gadzooks.data.entities.ids;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Builder
+//Note @Embeddable is required to allow this class to represent a Composite key
+@Embeddable
 public class CurrencyId implements Serializable {
     private String name;
     private String countryName;

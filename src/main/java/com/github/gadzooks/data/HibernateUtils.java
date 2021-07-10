@@ -50,7 +50,6 @@ public class HibernateUtils {
             configuration.addAnnotatedClass(Bank.class);
             configuration.addAnnotatedClass(Currency.class);
             configuration.addAnnotatedClass(Market.class);
-//            configuration.addAnnotatedClass(CurrencyId.class);
             // register to close on jvm exit
 
             //Set up the service registry
