@@ -6,11 +6,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static com.github.gadzooks.data.service.BankCrudService.createBank;
 
 class BankCrudRepositoryImplTest {
 
-    private static BankCrudRepository hibernateBankRepo;
+    private static BankCrudRepositoryImpl hibernateBankRepo;
 
     @BeforeAll
     static void setup() {
@@ -36,4 +38,11 @@ class BankCrudRepositoryImplTest {
     void update() {
     }
 
+    @Test
+    void criteriaQueryExample() {
+        List<Bank> banks = hibernateBankRepo.criteriaQueryExample("Third", "WA");
+        for (Bank bank : banks) {
+            System.out.println(bank);
+        }
+    }
 }

@@ -31,13 +31,19 @@ public abstract class AbstractHibernateRepository<TD, ID extends Serializable> i
     @Override
     public Long size() {
         Long count = null;
+        //NOTE use transactions for READONLY operations too
+        //https://stackoverflow.com/questions/13539213/why-do-i-need-transaction-in-hibernate-for-read-only-operations
+        Transaction tx = null;
         //Session extends AutoCloseable
         try (Session session = getSessionFactory().openSession()) {
+            tx = session.getTransaction();
             Query query = session.createNamedQuery(namedQueryForCount());
             count = (Long) query.getSingleResult();
+            tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
             log.info(e.getMessage());
+            tx.rollback();
         }
 
         return count;
@@ -65,8 +71,10 @@ public abstract class AbstractHibernateRepository<TD, ID extends Serializable> i
     public TD findById(ID id) {
         //Session extends AutoCloseable
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            return session.get(this.getPersistentClass(), id);
+            session.getTransaction().begin();
+            TD entity = session.get(this.getPersistentClass(), id);
+            session.getTransaction().commit();
+            return entity;
         }
     }
 
