@@ -15,6 +15,9 @@ import javax.persistence.*;
 @Table(name = "MARKET")
 @NamedQuery(name = "Market.count", query = "select count(*) from Market")
 public class Market {
+    //    For optimistic locking
+//    @Version
+//    private Long version;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MARKET_ID")

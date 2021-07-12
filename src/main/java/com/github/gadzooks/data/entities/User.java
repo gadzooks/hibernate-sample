@@ -20,12 +20,15 @@ import java.util.List;
 //NOTE : using lombok builder with JPA entity
 //https://stackoverflow.com/questions/34241718/lombok-builder-and-jpa-default-constructor/35602246#35602246
 public class User {
+    //    For optimistic locking
+//    @Version
+//    private Long version;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
     private Long userId;
 
-//    @NotNull
+    //    @NotNull
 //    @Size(min = 2, max = 256)
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;

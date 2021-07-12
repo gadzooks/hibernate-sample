@@ -15,10 +15,13 @@ import java.util.Map;
 @Table(name = "BANK")
 @NamedQuery(name = "Bank.count", query = "select count(*) from Bank")
 public class Bank {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BANK_ID")
-    private Long bankId;
+//    For optimistic locking
+//    @Version
+//    private Long version;
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+@Column(name = "BANK_ID")
+private Long bankId;
 
 //    @NotNull
 //    @Size(min = 2, max = 256)

@@ -26,4 +26,8 @@ public class Address {
 
     @Column(name = "ZIP")
     private String zip;
+
+//    For optimistic locking
+//    @Version
+//    private Long version;
 }

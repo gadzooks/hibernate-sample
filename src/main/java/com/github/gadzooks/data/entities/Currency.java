@@ -16,6 +16,9 @@ import javax.persistence.*;
 @Table(name = "CURRENCY")
 @NamedQuery(name = "Currency.count", query = "select count(*) from Currency")
 public class Currency {
+//    For optimistic locking
+//    @Version
+//    private Long version;
 
     //NOTE : NAME, COUNTRY_NAME Form the compound primary key
     @Id
