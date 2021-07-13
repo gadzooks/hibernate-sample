@@ -29,15 +29,19 @@
             <!-- hibernate specific properties-->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL55Dialect"/>
             <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.format_sql" value="true"/>
 
 
             <!--  time out in milliseconds -->
             <property name="javax.persistence.query.timeout" value="100"/>
             <property name="javax.persistence.lock.timeout" value="100"/>
+
+            <!-- Level 2 caching -->
+            <property name="hibernate.cache.region.factory_class" value="jcache"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE"/>
+
         </properties>
-
-
 
     </persistence-unit>
 </persistence>

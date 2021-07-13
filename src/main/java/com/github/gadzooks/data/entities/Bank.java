@@ -1,6 +1,7 @@
 package com.github.gadzooks.data.entities;
 
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Map;
@@ -11,6 +12,8 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
+@Cacheable
+@org.hibernate.annotations.Cache(region = "bankCache", usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Table(name = "BANK")
 @NamedQuery(name = "Bank.count", query = "select count(*) from Bank")
